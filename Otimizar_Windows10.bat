@@ -61,4 +61,4 @@ echo ===========================================
 echo  Otimizacao concluida com seguranca!
 echo  Reinicie o computador para aplicar tudo.
 echo ===========================================
-echo.
+pause

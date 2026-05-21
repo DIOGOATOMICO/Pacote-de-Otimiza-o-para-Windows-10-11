@@ -58,7 +58,7 @@ echo Limpeza concluida.
 
 title Relatorio de Performance
 
-set "arquivo=%userprofile%\Desktop\Relatorio_Performance.txt"
+set "arquivo=%~dp0logs\Relatorio_%time%.txt"
 
 echo ===================================================== > "%arquivo%"
 echo RELATORIO DE PERFORMANCE >> "%arquivo%"
