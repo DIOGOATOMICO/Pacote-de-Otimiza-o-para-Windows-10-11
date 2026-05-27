@@ -37,4 +37,3 @@ Execução
 
 Os scripts devem ser executados como administrador para funcionamento completo.
 se mesmo assim nao funcionar e so ir em propriedades e desbloquear ele 
-<img width="363" height="507" alt="image" src="https://github.com/user-attachments/assets/7830e1c3-f7bf-43d3-b760-833053372dad" />
