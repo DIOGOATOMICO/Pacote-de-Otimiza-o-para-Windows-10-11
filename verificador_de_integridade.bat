@@ -28,6 +28,10 @@ set "logdir=%~dp0logs"
 if not exist "%logdir%" mkdir "%logdir%"
 
 for /f "usebackq delims=" %%I in (`powershell -NoProfile -Command "Get-Date -Format 'yyyy-MM-dd_HH-mm-ss'"`) do set "datetime=%%I"
+if not defined datetime (
+    set "datetime=%date:~6,4%-%date:~3,2%-%date:~0,2%_%time:~0,2%-%time:~3,2%-%time:~6,2%"
+    set "datetime=%datetime: =0%"
+)
 set "arquivo=%logdir%\Relatorio_%datetime%.txt"
 
 :: =====================================================
@@ -103,9 +107,13 @@ for /d %%x in ("%SystemRoot%\Temp\*") do rd /s /q "%%x" >nul 2>&1
 
 echo Limpeza concluida.
 echo.
+:: =====================================================
+:: 7️⃣ Gerar relatorio final de performance
+setlocal EnableDelayedExpansion
 
-title Relatorio de Performance
+if not exist "%~dp0logs" mkdir "%~dp0logs"
 
+for /f "delims=" %%i in ('powershell -NoProfile -Command "(Get-Date).ToString('yyyy-MM-dd_HH-mm-ss')"') do set "datetime=%%i"
 set "arquivo=%~dp0logs\Relatorio_%datetime%.txt"
 
 echo ===================================================== > "%arquivo%"
@@ -134,9 +142,9 @@ echo. >> "%arquivo%"
 :: =========================
 
 echo [MEMORIA RAM] >> "%arquivo%"
-powershell -NoProfile -Command "$os = Get-CimInstance Win32_OperatingSystem; $total = [math]::Round($os.TotalVisibleMemorySize/1MB,2); $livre = [math]::Round($os.FreePhysicalMemory/1MB,2); $usado = [math]::Round($total-$livre,2); Write-Output ('Total RAM: ' + $total + ' GB'); Write-Output ('RAM Usada: ' + $usado + ' GB'); Write-Output ('RAM Livre: ' + $livre + ' GB')" >> "%arquivo%"
+powershell -NoProfile -Command "$os = Get-CimInstance Win3# from project folder
+.\test.bat2_OperatingSystem; $total = [math]::Round($os.TotalVisibleMemorySize/1MB,2); $livre = [math]::Round($os.FreePhysicalMemory/1MB,2); $usado = [math]::Round($total-$livre,2); Write-Output ('Total RAM: ' + $total + ' GB'); Write-Output ('RAM Usada: ' + $usado + ' GB'); Write-Output ('RAM Livre: ' + $livre + ' GB')" >> "%arquivo%"
 echo. >> "%arquivo%"
-
 :: =========================
 :: CPU
 :: =========================
@@ -161,5 +169,6 @@ echo [TOP PROCESSOS] >> "%arquivo%"
 powershell -NoProfile -Command "Get-Process | Sort-Object CPU -Descending | Select-Object -First 10 ProcessName,CPU,@{Name='RAM_MB';Expression={[math]::Round($_.WorkingSet/1MB,2)}} | Format-Table -AutoSize" >> "%arquivo%"
 echo. >> "%arquivo%"
 
+echo RELATORIO FINALIZADO! >> "%arquivo%"
 echo RELATORIO FINALIZADO!
 pause
